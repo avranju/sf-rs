@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.Windows.WinmdGenerator/0.53.14-preview">
+    <PropertyGroup Label="Globals">
+        <OutputWinmd>../.windows/winmd/sf.winmd</OutputWinmd>
+        <WinmdVersion>255.255.255.255</WinmdVersion>
+        <SfSdkRoot>../deps/sf-c-util/deps/servicefabric</SfSdkRoot>
+        <SfIdlRoot>$(SfSdkRoot)/idl</SfIdlRoot>
+        <AdditionalIncludes>$(CompiledHeadersDir);$(SfIdlRoot)</AdditionalIncludes>
+    </PropertyGroup>
+    <ItemGroup>
+        <Idls Include="$(SfIdlRoot)\FabricTypes.idl" />
+        <Idls Include="$(SfIdlRoot)\FabricCommon.idl" />
+        <Idls Include="$(SfIdlRoot)\FabricRuntime.idl" />
+        <Idls Include="$(SfIdlRoot)\FabricClient.idl" />
+        <Headers Include="$(CompiledHeadersDir)\FabricClient.h;$(CompiledHeadersDir)\FabricCommon.h;$(CompiledHeadersDir)\FabricRuntime.h;$(CompiledHeadersDir)\FabricTypes.h" />
+        <Partition Include="main.cpp">
+            <TraverseFiles>@(Headers)</TraverseFiles>
+            <Namespace>Microsoft.Fabric</Namespace>
+            <ExcludeFromCrossarch>true</ExcludeFromCrossarch>
+        </Partition>
+    </ItemGroup>
+</Project>

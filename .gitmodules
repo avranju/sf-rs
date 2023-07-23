@@ -1,0 +1,3 @@
+[submodule "deps/sf-c-util"]
+	path = deps/sf-c-util
+	url = https://github.com/Azure/sf-c-util.git
