@@ -18,11 +18,11 @@ Rust](https://withinrafael.com/2023/01/18/generating-metadata-for-the-windows-cr
 to write this file up. Here's what you'll need to do to generate (or
 re-generate) `sf.winmd`:
 
-1. If you haven't already, install the Visual Studio component called `MSVC v143
-   - VS 2022 C++ ARM64/ARM64EC build tools (Latest)` using the _Visual Studio
-   Installer_. If you're doing this out in the future when VS 2022 is old
-   ancient software, please supplant 2022 with whatever is the current
-   newfangled goodness.
+1. If you haven't already, install the Visual Studio component called
+   `MSVC v143 - VS 2022 C++ ARM64/ARM64EC build tools (Latest)` using the
+   _Visual Studio Installer_. If you're doing this out in the future when VS
+   2022 is old ancient software, please supplant 2022 with whatever is the
+   current newfangled goodness.
 
 2. Open a Visual Studio Development terminal and navigate to the `.metadata`
    folder and run:
