@@ -7,14 +7,20 @@ use windows::{
     },
 };
 
-use crate::{error::Error, ServiceManagementClient};
-use crate::{IFabricPropertyManagementClient2, IFabricServiceManagementClient7};
+use crate::error::Error;
+use crate::IFabricPropertyManagementClient2;
 
-pub struct FabricClient {
+pub trait MakeClient: Sized {
+    type Interface: ComInterface;
+
+    fn make(client: Self::Interface) -> Result<Self, Error>;
+}
+
+pub struct FabricLocalClient {
     client: IFabricPropertyManagementClient2,
 }
 
-impl FabricClient {
+impl FabricLocalClient {
     pub fn new() -> Result<Self, Error> {
         Ok(Self {
             client: unsafe {
@@ -26,10 +32,8 @@ impl FabricClient {
         })
     }
 
-    pub fn service_management_client(&self) -> Result<ServiceManagementClient, Error> {
-        Ok(ServiceManagementClient::new(
-            self.client.cast::<IFabricServiceManagementClient7>()?,
-        ))
+    pub fn make_client<T: MakeClient>(&self) -> Result<T, Error> {
+        T::make(self.client.cast()?)
     }
 }
 

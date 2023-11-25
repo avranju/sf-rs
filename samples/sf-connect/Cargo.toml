@@ -7,6 +7,8 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.72"
+env_logger = "0.10.1"
+log = "0.4.20"
 sf-rs = { version = "0.1.0", path = "../.." }
 tokio = { version = "1.34.0", features = ["rt-multi-thread", "sync", "macros"] }
 
