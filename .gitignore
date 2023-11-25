@@ -2,3 +2,4 @@
 /Cargo.lock
 .metadata/bin
 .metadata/obj
+.vscode
