@@ -210,9 +210,8 @@ impl TryFrom<&FABRIC_STATEFUL_SERVICE_PARTITION_QUERY_RESULT_ITEM> for StatefulS
     fn try_from(
         value: &FABRIC_STATEFUL_SERVICE_PARTITION_QUERY_RESULT_ITEM,
     ) -> Result<Self, Self::Error> {
-        let partition_information = ServicePartitionInformation::try_from(unsafe {
-            &*(value.PartitionInformation as *const FABRIC_SERVICE_PARTITION_INFORMATION)
-        })?;
+        let partition_information =
+            ServicePartitionInformation::try_from(unsafe { &*(value.PartitionInformation) })?;
         let target_replica_size = value.TargetReplicaSetSize;
         let min_replica_size = value.MinReplicaSetSize;
         let health_state = HealthState::from(value.HealthState);
@@ -244,9 +243,8 @@ impl TryFrom<&FABRIC_STATELESS_SERVICE_PARTITION_QUERY_RESULT_ITEM> for Stateles
     fn try_from(
         value: &FABRIC_STATELESS_SERVICE_PARTITION_QUERY_RESULT_ITEM,
     ) -> Result<Self, Self::Error> {
-        let partition_information = ServicePartitionInformation::try_from(unsafe {
-            &*(value.PartitionInformation as *const FABRIC_SERVICE_PARTITION_INFORMATION)
-        })?;
+        let partition_information =
+            ServicePartitionInformation::try_from(unsafe { &*(value.PartitionInformation) })?;
         let instance_count = value.InstanceCount;
         let health_state = HealthState::from(value.HealthState);
         let partition_status = QueryServicePartitionStatus::from(value.PartitionStatus);
