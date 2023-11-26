@@ -2,6 +2,12 @@
 name = "sf-rs"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "A Rust library for interacting with the Service Fabric COM API on Windows."
+repository = "https://github.com/avranju/sf-rs"
+readme = "README.md"
+keywords = ["service-fabric", "sf"]
+categories = ["system-programming", "windows"]
 
 [workspace]
 members = ["crates/tools/*", "samples/*"]
