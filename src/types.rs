@@ -27,7 +27,7 @@ use crate::{
     FABRIC_STATELESS_SERVICE_PARTITION_QUERY_RESULT_ITEM,
 };
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ServicePartition {
     kind: ServicePartitionKind,
     endpoints: Vec<ServiceEndpoint>,
@@ -69,7 +69,7 @@ impl ServicePartition {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ServiceEndpoint {
     address: String,
     role: EndpointRole,
@@ -163,7 +163,7 @@ impl From<PartitionKeyType> for FABRIC_PARTITION_KEY_TYPE {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PartitionQueryResultItem {
     Stateful(StatefulService),
     Stateless(StatelessService),
@@ -194,7 +194,7 @@ impl TryFrom<&FABRIC_SERVICE_PARTITION_QUERY_RESULT_ITEM> for PartitionQueryResu
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct StatefulService {
     pub partition_information: ServicePartitionInformation,
     pub target_replica_size: u32,
@@ -229,7 +229,7 @@ impl TryFrom<&FABRIC_STATEFUL_SERVICE_PARTITION_QUERY_RESULT_ITEM> for StatefulS
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct StatelessService {
     pub partition_information: ServicePartitionInformation,
     pub instance_count: u32,
@@ -258,7 +258,7 @@ impl TryFrom<&FABRIC_STATELESS_SERVICE_PARTITION_QUERY_RESULT_ITEM> for Stateles
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
 #[repr(i32)]
 pub enum HealthState {
     Invalid = FABRIC_HEALTH_STATE_INVALID.0,
@@ -281,7 +281,7 @@ impl From<FABRIC_HEALTH_STATE> for HealthState {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
 #[repr(i32)]
 pub enum ServiceKind {
     Invalid = FABRIC_SERVICE_KIND_INVALID.0,
@@ -300,7 +300,7 @@ impl From<FABRIC_SERVICE_KIND> for ServiceKind {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
 #[repr(i32)]
 pub enum QueryServicePartitionStatus {
     Invalid = FABRIC_QUERY_SERVICE_PARTITION_STATUS_INVALID.0,
@@ -325,7 +325,7 @@ impl From<FABRIC_QUERY_SERVICE_PARTITION_STATUS> for QueryServicePartitionStatus
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ServicePartitionInformation {
     Singleton(SingletonPartitionInformation),
     Int64Range(Int64RangePartitionInformation),
@@ -357,7 +357,7 @@ impl TryFrom<&FABRIC_SERVICE_PARTITION_INFORMATION> for ServicePartitionInformat
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SingletonPartitionInformation {
     pub id: GUID,
 }
@@ -369,7 +369,7 @@ impl From<&FABRIC_SINGLETON_PARTITION_INFORMATION> for SingletonPartitionInforma
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Int64RangePartitionInformation {
     pub id: GUID,
     pub low_key: i64,
@@ -389,7 +389,7 @@ impl From<&FABRIC_INT64_RANGE_PARTITION_INFORMATION> for Int64RangePartitionInfo
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NamedPartitionInformation {
     pub id: GUID,
     pub name: String,
