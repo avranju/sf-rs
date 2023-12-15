@@ -1,5 +1,5 @@
 use windows::{
-    core::{ComInterface, Error as WindowsError, GUID, HRESULT, PCSTR},
+    core::{ComInterface, Error as WindowsError, IUnknown, GUID, HRESULT, PCSTR},
     s,
     Win32::{
         Foundation::HANDLE,
@@ -7,8 +7,8 @@ use windows::{
     },
 };
 
-use crate::error::Error;
 use crate::IFabricPropertyManagementClient2;
+use crate::{agile::AgileRef, error::Error};
 
 pub trait MakeClient: Sized {
     type Interface: ComInterface;
@@ -16,24 +16,27 @@ pub trait MakeClient: Sized {
     fn make(client: Self::Interface) -> Result<Self, Error>;
 }
 
+#[derive(Debug)]
 pub struct FabricLocalClient {
-    client: IFabricPropertyManagementClient2,
+    client: AgileRef<IFabricPropertyManagementClient2>,
 }
 
 impl FabricLocalClient {
     pub fn new() -> Result<Self, Error> {
+        let client: IUnknown = unsafe {
+            fabric_create_local_client(
+                s!("FabricClient.dll"),
+                &IFabricPropertyManagementClient2::IID,
+            )?
+        };
+
         Ok(Self {
-            client: unsafe {
-                fabric_create_local_client(
-                    s!("FabricClient.dll"),
-                    &IFabricPropertyManagementClient2::IID,
-                )?
-            },
+            client: AgileRef::new(client)?,
         })
     }
 
     pub fn make_client<T: MakeClient>(&self) -> Result<T, Error> {
-        T::make(self.client.cast()?)
+        T::make(self.client.resolve()?.cast()?)
     }
 }
 

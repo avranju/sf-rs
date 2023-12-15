@@ -1,5 +1,7 @@
 extern crate windows;
 
+mod agile;
+
 pub mod bindings;
 use std::future::Future;
 
@@ -18,6 +20,7 @@ pub mod service;
 pub use service::*;
 
 pub mod types;
+use tokio::sync::mpsc;
 pub use types::*;
 
 use lazy_static::lazy_static;
@@ -67,4 +70,26 @@ fn is_retryable_error(op_name: &str, err: &Error) -> bool {
     } else {
         false
     }
+}
+
+pub(crate) fn in_tokio_runtime() -> bool {
+    tokio::runtime::Handle::try_current().is_ok()
+}
+
+pub(crate) fn channel_send<T, E>(tx: mpsc::Sender<Result<T, E>>, val: Result<T, E>) -> Result<(), E>
+where
+    T: Send + 'static,
+    E: Send + 'static,
+{
+    if in_tokio_runtime() {
+        tokio::spawn(async move {
+            if let Err(e) = tx.send(val).await {
+                log::error!("Failed to send item to channel: {:?}", e);
+            }
+        });
+    } else {
+        let _ = tx.blocking_send(val);
+    }
+
+    Ok(())
 }
